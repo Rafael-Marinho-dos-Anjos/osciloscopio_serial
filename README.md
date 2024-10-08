@@ -23,7 +23,7 @@ Para instalar as dependências, execute o seguinte comando:
 pip install -r requirements.txt
 ```
 
-### Como usar
+## Como usar
 
 1. Certifique-se de que o Arduino esteja configurado para enviar os valores dos pinos analógicos via comunicação serial.
 
@@ -35,7 +35,7 @@ pip install -r requirements.txt
 
 5. Para o cálculo correto da frequência, certifique-se de que a frequência de amostragem configurada no Arduino é a mesma informada ao software.
 
-### Código Arduino
+## Código Arduino
 
 Há um exemplo de código para realizar a leitura de 3 sinais simultâneos utilizando diferentes pinos do Arduino como entrada. [app/arduino/example.ino](app/arduino/example.ino)
 
@@ -49,6 +49,6 @@ A cada amostra de sinal coletada, o Arduino deverá enviar os valores separados 
 
 O software irá processar os sinais formados pelos valores enviados pelas sucessivas mensagens, calculando suas respectivas frequências, Vrms e Vpp.
 
-### Licença
+## Licença
 
 Este projeto está licenciado sob a [MIT License](LICENSE).
