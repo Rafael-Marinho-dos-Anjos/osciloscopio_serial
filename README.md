@@ -2,7 +2,7 @@
 
 *Osciloscópio Serial* é um software desenvolvido em Python para funcionar em conjunto com o Arduino. Ele permite a leitura de múltiplos sinais analógicos e a análise em tempo real das suas características, como frequência, Vrms e Vpp. O software também ajusta automaticamente as escalas de tempo e amplitude dos gráficos, facilitando a visualização dos sinais.
 
-![Interface do programa](image\osciloscopio.jpeg)
+![Interface do programa](image/osciloscopio.jpeg)
 
 ## Funcionalidades
 
@@ -37,7 +37,7 @@ pip install -r requirements.txt
 
 ### Código Arduino
 
-Há um exemplo de código para realizar a leitura de 3 sinais simultâneos utilizando diferentes pinos do Arduino como entrada. [app\arduino\example.ino](app\arduino\example.ino)
+Há um exemplo de código para realizar a leitura de 3 sinais simultâneos utilizando diferentes pinos do Arduino como entrada. [app/arduino/example.ino](app/arduino/example.ino)
 
 ### Exemplo de mensagem recebida
 
