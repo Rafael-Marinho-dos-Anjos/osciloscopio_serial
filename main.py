@@ -14,9 +14,18 @@ while len(port) == 0:
     print("Conecte o dispositivo à porta")
     port = Reader.get_ports()
 
-port = port[0]
+if len(port) > 1:
+    print("Escolha uma porta:")
+    for i, p in enumerate(port):
+        print(f"\t{i + 1} - {p}")
+    choice = int(input("Porta numero: ")) - 1
+
+    port = port[choice]
+else:
+    port = port[0]
+
 print("Dispositivo conectado em " + port)
-reader = Reader(port.split(" ")[0], n_entries=3)
+reader = Reader(port.split(" ")[0], n_entries=1)
 
 signals = "ABCDEFGH"
 fig, ax = plt.subplots(figsize=(12,5))
@@ -33,6 +42,10 @@ while True:
         continue
 
     values, time, periods = reader.get_reading()
+
+    if len(values[0]) == 0:
+        continue
+
     ax.clear()
 
     for val in values:
