@@ -1,3 +1,8 @@
+// Período da frequência de cada leitura em us (1000000 / frequencia)
+// Para uma frequencia de 1kHZ: interval = 1000000 / 1000 = 1000
+int interval = 1000;
+unsigned long elapsed_time;
+
 // Definição dos pinos analógicos
 const int pinA0 = A0;
 const int pinA1 = A1;
@@ -19,6 +24,9 @@ void setup() {
 }
 
 void loop() {
+  // Inicio da leitura
+  elapsed_time = micros();
+  
   // Leitura dos valores dos pinos analógicos
   valorA0 = analogRead(pinA0);
   valorA1 = analogRead(pinA1);
@@ -36,6 +44,9 @@ void loop() {
   Serial.print(" ");
   Serial.println(tensaoA2);
 
-  // Pequeno atraso para evitar enviar dados muito rapidamente
-  delay(100);  // 100ms de atraso (10 leituras por segundo)
+  // Tempo decorrido durante a leitura
+  elapsed_time = micros() - elapsed_time;
+
+  // Pequeno atraso para manter a frequência de leitura
+  delayMicroseconds(interval - elapsed_time); 
 }
