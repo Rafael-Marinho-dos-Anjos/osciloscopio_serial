@@ -6,6 +6,7 @@ from serial.tools import list_ports
 
 from app.buffer.signal_buffer import Buffer
 
+
 list_ports.comports()
 
 class Reader():

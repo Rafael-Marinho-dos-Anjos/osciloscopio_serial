@@ -1,4 +1,3 @@
-import numpy as np
 from threading import Lock
 
 
@@ -70,6 +69,3 @@ class Buffer:
                 return True
             
             return self.zero_passage_count >= 2
-
-if __name__ == "__main__":
-    from datetime import datetime
