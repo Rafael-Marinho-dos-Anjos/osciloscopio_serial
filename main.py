@@ -83,7 +83,9 @@ while True:
     fig.canvas.draw()
 
     ncols, nrows = fig.canvas.get_width_height()
-    image = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8).reshape(nrows, ncols, 3)
+    image = np.frombuffer(
+        np.delete(fig.canvas.buffer_rgba(), -1, -1),
+        dtype=np.uint8).reshape(nrows, ncols, 3)
     
     cv2.imshow("Osciloscopio", image)
 
