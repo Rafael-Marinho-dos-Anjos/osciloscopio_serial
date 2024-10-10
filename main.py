@@ -25,7 +25,7 @@ else:
     port = port[0]
 
 print("Dispositivo conectado em " + port)
-reader = Reader(port.split(" ")[0], n_entries=1)
+reader = Reader(port.split(" ")[0], n_entries=1, input_freq=2000)
 
 signals = "ABCDEFGH"
 fig, ax = plt.subplots(figsize=(12,5))
