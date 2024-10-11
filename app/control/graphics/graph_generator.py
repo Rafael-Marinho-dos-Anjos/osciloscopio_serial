@@ -20,6 +20,7 @@ class GraphGenerator:
         self.__running = False
         self.__delay = 1 / 2
         self.__reader_thread = None
+        self.__n_entries = 1
     
     def change_signal_ref(self, index: int, ref: str):
         self.__signals[index] = ref
@@ -32,7 +33,7 @@ class GraphGenerator:
             raise PortNotSelectedException("Dispositivo serial não selecionado")
 
         port = self.__port_selector.get_port()
-        self.__reader = Reader(port.split(" ")[0], n_entries=1, input_freq=1000)
+        self.__reader = Reader(port.split(" ")[0], n_entries=self.__n_entries, input_freq=1000)
 
         def __gen_graph():
             fig, ax = plt.subplots(figsize=self.__size)
@@ -107,6 +108,8 @@ class GraphGenerator:
             with self.__mutex:
                 self.__reader.kill()
                 self.__running = False
+                
+                del self.__reader
 
         with self.__mutex:
             self.__reader_thread = Thread(target=__gen_graph)
@@ -135,6 +138,15 @@ class GraphGenerator:
             
             with self.__mutex:
                 self.__delay = 1 / freq
+        
+        if "n_signals" in kwargs.keys():
+            entries = kwargs["n_signals"]
+
+            if entries <= 0:
+                raise InvalidEntrySizeException("Número de sinais inválido")
+            
+            with self.__mutex:
+                self.__n_entries = entries
         
         if "size" in kwargs.keys():
             size = kwargs["size"]

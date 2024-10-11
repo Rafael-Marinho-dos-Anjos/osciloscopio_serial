@@ -21,3 +21,8 @@ class InvalidUpdatingFrequenceException(Exception):
 class InvalidSizeException(Exception):
     def __init__(self, *args):
         super().__init__(*args)
+
+
+class InvalidEntrySizeException(Exception):
+    def __init__(self, *args):
+        super().__init__(*args)
