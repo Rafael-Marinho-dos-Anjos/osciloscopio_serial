@@ -86,6 +86,8 @@ while True:
     image = np.frombuffer(
         np.delete(fig.canvas.buffer_rgba(), -1, -1),
         dtype=np.uint8).reshape(nrows, ncols, 3)
+
+    print(image.shape)
     
     cv2.imshow("Osciloscopio", image)
 
