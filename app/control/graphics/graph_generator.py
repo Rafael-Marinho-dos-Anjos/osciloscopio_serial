@@ -5,8 +5,8 @@ import cv2
 from threading import Thread, Lock
 import re
 
-from app.reader import Reader
-from app.serial.serial_port import PortSelector
+from app.control.serial.reader import Reader
+from app.control.serial.serial_port import PortSelector
 from app.utils.exceptions import *
 
 

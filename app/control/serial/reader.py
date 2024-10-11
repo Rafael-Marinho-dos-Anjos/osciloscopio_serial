@@ -4,7 +4,7 @@ from threading import Thread, Lock
 import serial
 from serial.tools import list_ports
 
-from app.buffer.signal_buffer import Buffer
+from app.control.buffer.signal_buffer import Buffer
 
 
 list_ports.comports()

@@ -3,7 +3,7 @@ from time import sleep
 import numpy as np
 import cv2
 
-from app.reader import Reader
+from app.control.serial.reader import Reader
 
 
 port = Reader.get_ports()

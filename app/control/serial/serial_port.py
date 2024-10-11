@@ -1,4 +1,4 @@
-from app.reader import Reader
+from app.control.serial.reader import Reader
 from app.utils.exceptions import *
 
 
