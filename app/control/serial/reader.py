@@ -16,14 +16,14 @@ class Reader():
             separator: str = " ",
             selector = None
         ):
-        self.mutex = Lock()
-        self.buffers = [Buffer() for i in range(n_entries)]
-        self.values_to_send = [list() for i in range(n_entries)]
-        self.time_list = list()
-        self.times_to_send = list()
-        self.period = [0 for i in range(n_entries)]
-        self.reading = True
-        self.actualization = True
+        self.__mutex = Lock()
+        self.__buffers = [Buffer() for i in range(n_entries)]
+        self.__values_to_send = [list() for i in range(n_entries)]
+        self.__time_list = list()
+        self.__times_to_send = list()
+        self.__period = [0 for i in range(n_entries)]
+        self.__reading = True
+        self.__actualization = True
 
     
         self.ser = serial.Serial(
@@ -65,57 +65,57 @@ class Reader():
                             if len(value) != n_entries:
                                 continue
 
-                            with self.mutex:
+                            with self.__mutex:
                                 for i in range(n_entries):
-                                    self.buffers[i].put_read(value[i])
+                                    self.__buffers[i].put_read(value[i])
 
-                                self.time_list.append(time)
+                                self.__time_list.append(time)
 
-                                if sum([buffer.can_send(limit) for buffer in self.buffers]) == n_entries:
-                                    self.values_to_send = []
-                                    self.period = []
+                                if sum([buffer.can_send(limit) for buffer in self.__buffers]) == n_entries:
+                                    self.__values_to_send = []
+                                    self.__period = []
                                     
-                                    for buffer in self.buffers:
+                                    for buffer in self.__buffers:
                                         sequence, period = buffer.get_sequence()
-                                        self.values_to_send.append(sequence)
-                                        self.period.append(period * step)
+                                        self.__values_to_send.append(sequence)
+                                        self.__period.append(period * step)
                                     
                                         buffer.flush()
                                         
-                                    self.times_to_send = self.time_list
-                                    self.time_list = list()
-                                    self.actualization = True
+                                    self.__times_to_send = self.__time_list
+                                    self.__time_list = list()
+                                    self.__actualization = True
                                     
-                                reading = self.reading
+                                reading = self.__reading
 
                             time += 10 * step
                 except:
-                    with self.mutex:
-                        self.reading = False
+                    with self.__mutex:
+                        self.__reading = False
                     break
         
         self.thread = Thread(target=__reader, args=[])
         self.thread.start()
 
     def get_reading(self):
-        with self.mutex:
-            if len(self.values_to_send[0]) > 0:
-                self.actualization = False
-                return self.values_to_send, self.times_to_send, self.period
+        with self.__mutex:
+            if len(self.__values_to_send[0]) > 0:
+                self.__actualization = False
+                return self.__values_to_send, self.__times_to_send, self.__period
 
             else:
-                return [buffer.get_sequence()[0] for buffer in self.buffers], self.time_list, self.period
+                return [buffer.get_sequence()[0] for buffer in self.__buffers], self.__time_list, self.__period
     
     def kill(self):
-        with self.mutex:
-            self.reading = False
+        with self.__mutex:
+            self.__reading = False
     
     def is_reading(self):
-        with self.mutex:
-            return self.reading
+        with self.__mutex:
+            return self.__reading
 
     def has_actualization(self):
-        return self.actualization
+        return self.__actualization
             
     def get_ports():
         return [str(port) for port in list_ports.comports()]

@@ -26,7 +26,7 @@ class PortSelector(metaclass=SingletonMeta):
             __define_port(port)
         else:
             with self.__mutex:
-                if self.__port in self.get_available_ports():
+                if self.__port in PortSelector.get_available_ports():
                     raise DeviceAlreadySelectedException("Já existe uma porta selecionada")
                 else:
                     __define_port(port)

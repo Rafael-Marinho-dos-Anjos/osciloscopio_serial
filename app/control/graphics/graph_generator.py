@@ -124,6 +124,7 @@ class GraphGenerator:
 
     def stop(self):
         with self.__mutex:
+            self.__img = None
             self.__running = False
 
     def get_graph(self):

@@ -5,67 +5,67 @@ class Buffer:
     def __init__(
             self
         ):
-        self.value_seq = list()
-        self.values_counter = 0
+        self.__value_seq = list()
+        self.__values_counter = 0
 
-        self.values_to_send = None
+        self.__values_to_send = None
 
-        self.period_counter = 0
-        self.period = []
-        self.values_mean = 0
-        self.zero_passage_count = 0
+        self.__period_counter = 0
+        self.__period = []
+        self.__values_mean = 0
+        self.__zero_passage_count = 0
 
-        self.first_period = True
-        self.last_period = None
+        self.__first_period = True
+        self.__last_period = None
 
-        self.mutex = Lock()
+        self.__mutex = Lock()
     
     def put_read(self, value) -> None:
-        with self.mutex:
-            if len(self.value_seq) and \
-                self.value_seq[-1] < self.values_mean and \
-                value >= self.values_mean:
-                self.zero_passage_count += 1
-                self.period.append(self.period_counter)
-                self.period_counter = 0
+        with self.__mutex:
+            if len(self.__value_seq) and \
+                self.__value_seq[-1] < self.__values_mean and \
+                value >= self.__values_mean:
+                self.__zero_passage_count += 1
+                self.__period.append(self.__period_counter)
+                self.__period_counter = 0
 
-            self.value_seq.append(value)
-            self.values_counter += 1
-            self.period_counter += 1
+            self.__value_seq.append(value)
+            self.__values_counter += 1
+            self.__period_counter += 1
 
-            if self.first_period:
-                self.values_mean = sum(self.value_seq) / self.values_counter
+            if self.__first_period:
+                self.__values_mean = sum(self.__value_seq) / self.__values_counter
     
     def flush(self):
-        with self.mutex:
-            self.values_mean = sum(self.value_seq) / self.values_counter
+        with self.__mutex:
+            self.__values_mean = sum(self.__value_seq) / self.__values_counter
 
-            self.value_seq = list()
-            self.values_counter = 0
+            self.__value_seq = list()
+            self.__values_counter = 0
 
-            self.period_counter = 0
-            self.period = []
-            self.zero_passage_count = 0
+            self.__period_counter = 0
+            self.__period = []
+            self.__zero_passage_count = 0
 
-            self.first_period = False
+            self.__first_period = False
     
     def get_sequence(self):
-        with self.mutex:
-            if len(self.period) > 0:
-                period = sum(self.period) / len(self.period)
+        with self.__mutex:
+            if len(self.__period) > 0:
+                period = sum(self.__period) / len(self.__period)
             else:
                 period = 0
 
-            self.last_period = period
+            self.__last_period = period
 
-            return self.value_seq, period
+            return self.__value_seq, period
         
     def can_send(self, limit: int = 0):
-        with self.mutex:
-            if limit == -1 and self.last_period is not None:
-                limit = self.last_period
+        with self.__mutex:
+            if limit == -1 and self.__last_period is not None:
+                limit = self.__last_period
             
-            if self.period_counter > limit and limit != 0:
+            if self.__period_counter > limit and limit != 0:
                 return True
             
-            return self.zero_passage_count >= 2
+            return self.__zero_passage_count >= 2
