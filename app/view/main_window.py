@@ -1,5 +1,5 @@
 import tkinter as tk
-from threading import Thread, Lock
+from threading import Lock
 from PIL.Image import fromarray
 from PIL import ImageTk
 
@@ -95,8 +95,8 @@ class MainWindow(metaclass=SingletonMeta):
         self.__canvas.image=img
 
     def get_win_shape(self):
-        w = self.__root.winfo_width() // 100
-        h = self.__root.winfo_height() // 100
+        w = self.__root.winfo_width() / 100
+        h = self.__root.winfo_height() / 100
 
         return w, h
 

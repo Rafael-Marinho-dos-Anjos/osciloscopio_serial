@@ -21,16 +21,20 @@ class Aplication(metaclass=SingletonMeta):
                 running = self.__running
 
             while running:
-                size = self.__window.get_win_shape()
-                self.__graph_gen.config(size=size)
+                try:
+                    size = self.__window.get_win_shape()
+                    self.__graph_gen.config(size=size)
 
-                sleep(0.5)
+                    sleep(0.5)
 
-                img = self.__graph_gen.get_graph()
-                self.__window.update_image(img)
+                    img = self.__graph_gen.get_graph()
+                    self.__window.update_image(img)
 
-                with self.__mutex:
-                    running = self.__running
+                    with self.__mutex:
+                        running = self.__running
+                
+                except:
+                    break
             
             self.stop()
         

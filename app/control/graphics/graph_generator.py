@@ -46,7 +46,7 @@ class GraphGenerator:
                 delay = self.__delay
 
             while running:
-                fig.set_size_inches(*self.__size)
+                fig.set_size_inches(*list(map(int, self.__size)))
                 sleep(delay)
 
                 with self.__mutex:
@@ -107,7 +107,7 @@ class GraphGenerator:
                     dtype=np.uint8).reshape(nrows, ncols, 3)
                 
                 with self.__mutex:
-                    self.__img = image
+                    self.__img = cv2.resize(image, list(map(lambda x: int(x*100), self.__size)))
                     running = self.__running
                     delay = self.__delay
 
@@ -133,7 +133,7 @@ class GraphGenerator:
                 return self.__img
         
             img = cv2.imread("image/device_nc.png")
-            img = cv2.resize(img, list(map(lambda x: x*100, self.__size)))
+            img = cv2.resize(img, list(map(lambda x: int(x*100), self.__size)))
 
             return img
     
@@ -160,7 +160,7 @@ class GraphGenerator:
             size = kwargs["size"]
 
             if isinstance(size, str) and re.match("^\d+x\d+$", size):
-                size = list(map(lambda x: int(float(x) / 100), size.split("x")))
+                size = list(map(lambda x: float(x) / 100, size.split("x")))
             elif not (isinstance(size, tuple) or isinstance(size, list)):
                 raise InvalidSizeException("A resolução informada deve ser do tipo 'wxh', tupla ou lista")
 
