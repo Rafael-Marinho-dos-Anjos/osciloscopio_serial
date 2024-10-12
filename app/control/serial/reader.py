@@ -1,21 +1,20 @@
-from math import pi, sin
 from threading import Thread, Lock
 
 import serial
 from serial.tools import list_ports
 
 from app.control.buffer.signal_buffer import Buffer
+from app.utils.exceptions import *
 
-
-list_ports.comports()
 
 class Reader():
     def __init__(
             self,
-            input: str,
+            input_: str,
             input_freq: int = 1000,
             n_entries: int = 1,
-            separator: str = " "
+            separator: str = " ",
+            selector = None
         ):
         self.mutex = Lock()
         self.buffers = [Buffer() for i in range(n_entries)]
@@ -28,7 +27,7 @@ class Reader():
 
     
         self.ser = serial.Serial(
-            port=input,
+            port=input_,
             baudrate=9600,
             parity=serial.PARITY_ODD,
             stopbits=serial.STOPBITS_TWO,
@@ -42,47 +41,58 @@ class Reader():
             limit = input_freq / 2
 
             while reading:
-                bytesWaiting = self.ser.inWaiting()
+                try:
+                    bytesWaiting = self.ser.inWaiting()
 
-                if (bytesWaiting != 0):
-                    value = self.ser.readline()
-
-                    if value:
+                    if (bytesWaiting != 0):
                         try:
-                            value = value.decode("utf-8")
-                            value = value.replace("\r", "")
-                            value = value.replace("\n", "")
-                            value = list(map(float, value.split(separator)))
+                            value = self.ser.readline()
                         except:
-                            continue
+                            if selector:
+                                selector.release()
 
-                        if len(value) != n_entries:
-                            continue
+                            break
 
-                        with self.mutex:
-                            for i in range(n_entries):
-                                self.buffers[i].put_read(value[i])
+                        if value:
+                            try:
+                                value = value.decode("utf-8")
+                                value = value.replace("\r", "")
+                                value = value.replace("\n", "")
+                                value = list(map(float, value.split(separator)))
+                            except:
+                                continue
 
-                            self.time_list.append(time)
+                            if len(value) != n_entries:
+                                continue
 
-                            if sum([buffer.can_send(limit) for buffer in self.buffers]) == n_entries:
-                                self.values_to_send = []
-                                self.period = []
-                                
-                                for buffer in self.buffers:
-                                    sequence, period = buffer.get_sequence()
-                                    self.values_to_send.append(sequence)
-                                    self.period.append(period * step)
-                                
-                                    buffer.flush()
+                            with self.mutex:
+                                for i in range(n_entries):
+                                    self.buffers[i].put_read(value[i])
+
+                                self.time_list.append(time)
+
+                                if sum([buffer.can_send(limit) for buffer in self.buffers]) == n_entries:
+                                    self.values_to_send = []
+                                    self.period = []
                                     
-                                self.times_to_send = self.time_list
-                                self.time_list = list()
-                                self.actualization = True
-                                
-                            reading = self.reading
+                                    for buffer in self.buffers:
+                                        sequence, period = buffer.get_sequence()
+                                        self.values_to_send.append(sequence)
+                                        self.period.append(period * step)
+                                    
+                                        buffer.flush()
+                                        
+                                    self.times_to_send = self.time_list
+                                    self.time_list = list()
+                                    self.actualization = True
+                                    
+                                reading = self.reading
 
-                        time += 10 * step
+                            time += 10 * step
+                except:
+                    with self.mutex:
+                        self.reading = False
+                    break
         
         self.thread = Thread(target=__reader, args=[])
         self.thread.start()
@@ -99,6 +109,10 @@ class Reader():
     def kill(self):
         with self.mutex:
             self.reading = False
+    
+    def is_reading(self):
+        with self.mutex:
+            return self.reading
 
     def has_actualization(self):
         return self.actualization

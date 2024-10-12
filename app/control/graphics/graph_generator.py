@@ -33,22 +33,28 @@ class GraphGenerator:
             raise PortNotSelectedException("Dispositivo serial não selecionado")
 
         port = self.__port_selector.get_port()
-        self.__reader = Reader(port.split(" ")[0], n_entries=self.__n_entries, input_freq=1000)
+        self.__reader = Reader(
+            port.split(" ")[0], n_entries=self.__n_entries,
+            input_freq=1000,
+            selector=self.__port_selector)
 
         def __gen_graph():
             fig, ax = plt.subplots(figsize=self.__size)
-            cv2.namedWindow("Osciloscopio", cv2.WINDOW_NORMAL)
 
             running = True
             with self.__mutex:
                 delay = self.__delay
 
             while running:
+                fig.set_size_inches(*self.__size)
                 sleep(delay)
 
                 with self.__mutex:
                     if not self.__reader.has_actualization():
                         continue
+                    if not self.__reader.is_reading():
+                        self.__port_selector.release()
+                        break
 
                     values, time, periods = self.__reader.get_reading()
 
@@ -113,6 +119,7 @@ class GraphGenerator:
 
         with self.__mutex:
             self.__reader_thread = Thread(target=__gen_graph)
+            self.__running = True
             self.__reader_thread.start()
 
     def stop(self):

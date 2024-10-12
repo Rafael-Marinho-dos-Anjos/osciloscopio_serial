@@ -39,9 +39,10 @@ class PortSelector(metaclass=SingletonMeta):
             return self.__port
 
     def release(self):
-        if hasattr("_PortSelector__port"):
+        if hasattr(self, "_PortSelector__port"):
             with self.__mutex:
                 del self.__port
+                self.__selected = False
 
     def ready(self):
         with self.__mutex:
