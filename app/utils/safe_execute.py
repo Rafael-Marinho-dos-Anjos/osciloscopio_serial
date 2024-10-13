@@ -1,7 +1,7 @@
 from tkinter.messagebox import showerror
 
 
-def safe_execute(func):
+def safe_execute(func, msg=None):
     try:
         res = func()
         
@@ -10,6 +10,6 @@ def safe_execute(func):
     except Exception as e:
         showerror(
             "Erro!",
-            str(e)
+            str(e) if msg is None else msg
         )
     

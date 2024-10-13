@@ -95,6 +95,7 @@ class Reader():
                     break
         
         self.thread = Thread(target=__reader, args=[])
+        self.thread.daemon = True
         self.thread.start()
 
     def get_reading(self):

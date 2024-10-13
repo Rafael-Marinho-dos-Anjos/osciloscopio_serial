@@ -1,5 +1,4 @@
 import tkinter as tk
-from threading import Lock
 from PIL.Image import fromarray
 from PIL import ImageTk
 
@@ -7,6 +6,9 @@ from app.control.graphics.graph_generator import GraphGenerator
 from app.control.serial.serial_port import PortSelector
 from app.utils.singleton import SingletonMeta
 from app.utils.safe_execute import safe_execute
+from app.view.freq_window import FrequenceConfig
+from app.view.signal_window import SignalConfig
+from app.config.config_holder import ConfigHolder
 
 
 def donothing():
@@ -29,11 +31,10 @@ class MainWindow(metaclass=SingletonMeta):
             relheight=0.98,
             anchor='center')
 
-        self.__running = False
-        self.__mutex = Lock()
-
         self.update_image(self.__graph_gen.get_graph())
         self.__create_menu_bar()
+
+        self.__root.protocol("WM_DELETE_WINDOW", lambda: self.__quit())
     
     def bind_controller(self, controller):
         self.__controller = controller
@@ -56,10 +57,12 @@ class MainWindow(metaclass=SingletonMeta):
         self.__menubar.add_cascade(label="Portas", menu=self.__ports_menu)
 
     def __config_frequence(self):
-        pass
+        frequence_config = FrequenceConfig(master=self)
+        frequence_config.mainloop()
 
     def __signals(self):
-        pass
+        signal_config = SignalConfig(master=self)
+        signal_config.mainloop()
 
     def __update_ports_menu(self):
         ports = PortSelector.get_available_ports()
@@ -88,11 +91,12 @@ class MainWindow(metaclass=SingletonMeta):
                 self.__select_port_submenu.add_command(label="   "+port, command=__create_select_command(port))
 
     def update_image(self, img):
-        img = fromarray(img)
-        img = ImageTk.PhotoImage(img)
+        if self.__root.winfo_exists():
+            img = fromarray(img)
+            img = ImageTk.PhotoImage(img)
 
-        self.__canvas.configure(image=img)
-        self.__canvas.image=img
+            self.__canvas.configure(image=img)
+            self.__canvas.image=img
 
     def get_win_shape(self):
         w = self.__root.winfo_width() / 100
@@ -104,3 +108,10 @@ class MainWindow(metaclass=SingletonMeta):
         safe_execute(
             lambda: self.__controller.execute()
         )
+    
+    def __quit(self):
+        self.__port_selector.release()
+        self.__controller.stop()
+
+        self.__root.destroy()
+        ConfigHolder().save()

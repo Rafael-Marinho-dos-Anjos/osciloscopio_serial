@@ -8,22 +8,20 @@ import re
 from app.control.serial.reader import Reader
 from app.control.serial.serial_port import PortSelector
 from app.utils.exceptions import *
+from app.config.config_holder import ConfigHolder
+from app.utils.singleton import SingletonMeta
 
 
-class GraphGenerator:
-    def __init__(self, frequence: float = 2):
+class GraphGenerator(metaclass=SingletonMeta):
+    def __init__(self):
         self.__port_selector = PortSelector()
-        self.__signals = [char for char in "ABCDEFGH"]
+        self.__signals = ConfigHolder().get_signal_labels()
         self.__size = (12, 5)
         self.__mutex = Lock()
         self.__img = None
         self.__running = False
         self.__delay = 1 / 2
         self.__reader_thread = None
-        self.__n_entries = 1
-    
-    def change_signal_ref(self, index: int, ref: str):
-        self.__signals[index] = ref
 
     def start(self):
         if self.__running:
@@ -34,11 +32,13 @@ class GraphGenerator:
 
         port = self.__port_selector.get_port()
         self.__reader = Reader(
-            port.split(" ")[0], n_entries=self.__n_entries,
-            input_freq=1000,
+            port.split(" ")[0],
+            n_entries=len(self.__signals),
+            input_freq=ConfigHolder().get_frequence(),
             selector=self.__port_selector)
 
         def __gen_graph():
+            plt.switch_backend('agg')
             fig, ax = plt.subplots(figsize=self.__size)
 
             running = True
@@ -120,6 +120,7 @@ class GraphGenerator:
         with self.__mutex:
             self.__reader_thread = Thread(target=__gen_graph)
             self.__running = True
+            self.__reader_thread.daemon = True
             self.__reader_thread.start()
 
     def stop(self):
