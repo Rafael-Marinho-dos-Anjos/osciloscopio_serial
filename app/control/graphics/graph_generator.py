@@ -39,6 +39,7 @@ class GraphGenerator:
             selector=self.__port_selector)
 
         def __gen_graph():
+            plt.switch_backend('agg')
             fig, ax = plt.subplots(figsize=self.__size)
 
             running = True
