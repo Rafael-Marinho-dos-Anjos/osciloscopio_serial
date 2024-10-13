@@ -1,6 +1,6 @@
 # Osciloscópio Serial
 
-*Osciloscópio Serial* é um software desenvolvido em Python para funcionar em conjunto com o Arduino. Ele permite a leitura de múltiplos sinais analógicos e a análise em tempo real das suas características, como frequência, Vrms e Vpp. O software também ajusta automaticamente as escalas de tempo e amplitude dos gráficos, facilitando a visualização dos sinais.
+*Osciloscópio Serial* é um software desenvolvido em Python para funcionar em conjunto com o Arduino. Ele permite a leitura de múltiplos sinais analógicos e a análise em tempo real das suas características, como frequência, tensão eficaz e tensão pico a pico. O software também ajusta automaticamente as escalas de tempo e amplitude dos gráficos, facilitando a visualização dos sinais.
 
 ![Interface do programa](image/osciloscopio.jpeg)
 
@@ -9,7 +9,7 @@
 - *Leitura simultânea de vários sinais*: o Arduino envia os valores lidos dos pinos analógicos via comunicação serial. Cada valor de sinal é separado por espaços na mensagem (exemplo: 0.5 0.1 0.7).
 - *Análise automática dos sinais*: o programa calcula automaticamente a frequência, Vrms (tensão eficaz) e Vpp (tensão de pico a pico) para cada sinal recebido.
 - *Ajuste automático de escalas*: as escalas de tempo e amplitude dos sinais exibidos no gráfico são ajustadas automaticamente.
-- *Detecção automática da placa*: ao iniciar o programa, ele detecta automaticamente a placa Arduino conectada à porta USB. Se não houver uma placa conectada, o software aguardará até que uma seja conectada.
+- *Detecção automática da placa*: o programa detecta automaticamente todas as placa Arduino conectadas às portas USB do computador para que o usuário selecione qual deseja usar.
 
 ## Requisitos
 
@@ -31,9 +31,11 @@ pip install -r requirements.txt
 
 3. Execute o programa Python.
 
-4. O programa detectará automaticamente a placa e começará a receber os sinais.
+4. Atualize a frequência de amostragem configurada na leitura do Arduino no menu: "Config > Frequência de amostragem".
 
-5. Para o cálculo correto da frequência, certifique-se de que a frequência de amostragem configurada no Arduino é a mesma informada ao software.
+5. Configure a quantidade de sinais lido pelo Arduino no menu "Config > Entrada de sinais". É importante informar na configuração a quantidade exata de sinais lidos senão o programa não funcionará corretamente.
+
+6. No menu "Portas > Selecionar dispositivo de entrada" e selecione a placa que fará a leitura dos sinais. Em seguida, o programa começará a exibir as leituras na tela.
 
 ## Código Arduino
 
