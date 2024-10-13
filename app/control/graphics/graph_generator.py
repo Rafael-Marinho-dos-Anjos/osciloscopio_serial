@@ -120,6 +120,7 @@ class GraphGenerator(metaclass=SingletonMeta):
         with self.__mutex:
             self.__reader_thread = Thread(target=__gen_graph)
             self.__running = True
+            self.__reader_thread.daemon = True
             self.__reader_thread.start()
 
     def stop(self):

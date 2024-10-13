@@ -44,6 +44,7 @@ class Aplication(metaclass=SingletonMeta):
             self.__running = True
 
         self.__thread = Thread(target=__runner)
+        self.__thread.daemon = True
         self.__thread.start()
     
     def is_running(self):

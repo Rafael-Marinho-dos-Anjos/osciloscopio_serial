@@ -14,6 +14,7 @@ class FrequenceConfig(tk.Toplevel):
         size = (350, 150)
         self.minsize(*size)
         self.geometry(f"{size[0]}x{size[1]}")
+        self.resizable(0, 0)
         self.__draw_window()
         self.bind("<Return>", self.__confirm)
 
@@ -58,6 +59,8 @@ class FrequenceConfig(tk.Toplevel):
                 raise Exception()
             
             ConfigHolder().set_frequence(freq)
+                    
+            self.destroy()
 
             if hasattr(self.__master, "_MainWindow__controller"):
                 running = self.__master._MainWindow__controller.is_running()
@@ -67,8 +70,6 @@ class FrequenceConfig(tk.Toplevel):
 
                 if running:
                     self.__master.start()
-                    
-            self.destroy()
         
         safe_execute(
             __set_freq,

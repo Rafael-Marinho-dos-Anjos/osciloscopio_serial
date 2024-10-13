@@ -1,5 +1,4 @@
 import tkinter as tk
-from threading import Lock
 from PIL.Image import fromarray
 from PIL import ImageTk
 
@@ -8,6 +7,7 @@ from app.control.serial.serial_port import PortSelector
 from app.utils.singleton import SingletonMeta
 from app.utils.safe_execute import safe_execute
 from app.view.freq_window import FrequenceConfig
+from app.view.signal_window import SignalConfig
 from app.config.config_holder import ConfigHolder
 
 
@@ -61,7 +61,8 @@ class MainWindow(metaclass=SingletonMeta):
         frequence_config.mainloop()
 
     def __signals(self):
-        pass
+        signal_config = SignalConfig(master=self)
+        signal_config.mainloop()
 
     def __update_ports_menu(self):
         ports = PortSelector.get_available_ports()
