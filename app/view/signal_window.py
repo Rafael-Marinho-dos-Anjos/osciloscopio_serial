@@ -32,7 +32,6 @@ class SignalConfig(tk.Toplevel):
             self,
             textvariable=self.__n
         )
-        # self.__n_entry.bind('<Key>', self.__update_labels)
 
         self.__selector_label = tk.Label(
             self,
@@ -93,8 +92,13 @@ class SignalConfig(tk.Toplevel):
             return False
         
         selected = self.__selected.get()
-        sel_index = self.__signal_labels.index(selected)
-        self.__signal_labels[sel_index] = self.__label.get()
+
+        try:
+            sel_index = self.__signal_labels.index(selected)
+            self.__signal_labels[sel_index] = self.__label.get()
+            
+        except:
+            pass
 
         if len(self.__signal_labels) > n:
             self.__signal_labels = self.__signal_labels[:n]

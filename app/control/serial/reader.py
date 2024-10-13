@@ -26,7 +26,7 @@ class Reader():
         self.__actualization = True
 
     
-        self.ser = serial.Serial(
+        self.__ser = serial.Serial(
             port=input_,
             baudrate=9600,
             parity=serial.PARITY_ODD,
@@ -42,11 +42,11 @@ class Reader():
 
             while reading:
                 try:
-                    bytesWaiting = self.ser.inWaiting()
+                    bytesWaiting = self.__ser.inWaiting()
 
                     if (bytesWaiting != 0):
                         try:
-                            value = self.ser.readline()
+                            value = self.__ser.readline()
                         except:
                             if selector:
                                 selector.release()
@@ -92,6 +92,7 @@ class Reader():
                 except:
                     with self.__mutex:
                         self.__reading = False
+                        self.__ser.close()
                     break
         
         self.thread = Thread(target=__reader, args=[])
