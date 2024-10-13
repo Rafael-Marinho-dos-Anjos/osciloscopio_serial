@@ -45,6 +45,10 @@ class Aplication(metaclass=SingletonMeta):
 
         self.__thread = Thread(target=__runner)
         self.__thread.start()
+    
+    def is_running(self):
+        with self.__mutex:
+            return self.__running
 
     def run(self):
         self.__window.init_window()
