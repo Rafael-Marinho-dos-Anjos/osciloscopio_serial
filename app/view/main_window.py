@@ -8,6 +8,7 @@ from app.utils.singleton import SingletonMeta
 from app.utils.safe_execute import safe_execute
 from app.view.freq_window import FrequenceConfig
 from app.view.signal_window import SignalConfig
+from app.view.divisor_window import DivisorConfig
 from app.config.config_holder import ConfigHolder
 
 
@@ -49,6 +50,7 @@ class MainWindow(metaclass=SingletonMeta):
         self.__conf_menu = tk.Menu(self.__menubar, tearoff=0)
         self.__conf_menu.add_command(label="Frequência de amostragem", command=self.__config_frequence)
         self.__conf_menu.add_command(label="Entrada de sinais", command=self.__signals)
+        self.__conf_menu.add_command(label="Divisor de tensão", command=self.__config_divisor)
         self.__menubar.add_cascade(label="Config", menu=self.__conf_menu)
 
         self.__ports_menu = tk.Menu(self.__menubar, tearoff=0, postcommand=self.__update_ports_menu)
@@ -63,6 +65,10 @@ class MainWindow(metaclass=SingletonMeta):
     def __signals(self):
         signal_config = SignalConfig(master=self)
         signal_config.mainloop()
+
+    def __config_divisor(self):
+        divisor_config = DivisorConfig(master=self)
+        divisor_config.mainloop()
 
     def __update_ports_menu(self):
         ports = PortSelector.get_available_ports()

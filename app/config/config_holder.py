@@ -60,7 +60,7 @@ class ConfigHolder(metaclass=SingletonMeta):
     def get_signal_labels(self):
         return self.__cfg_dict["signals"]
 
-    def enable_divisor(self, enable: bool):
+    def enable_divisor(self, enable: int):
         self.__cfg_dict["divisor"]["enabled"] = enable
     
     def set_divisor_resistors(self, rb: float, rc: float):
