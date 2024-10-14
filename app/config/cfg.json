@@ -1,1 +1,1 @@
-{"frequence": 1000.0, "signals": ["Sinal"], "divisor": {"enabled": 1, "Rb": 100.0, "Rc": 100.0}}
+{"frequence": 1000.0, "signals": ["A", "B", "C"], "divisor": {"enabled": 0, "Rb": 100.0, "Rc": 100.0}}

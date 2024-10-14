@@ -62,8 +62,10 @@ class Reader():
                             except:
                                 continue
 
-                            if len(value) != n_entries:
+                            if len(value) < n_entries:
                                 continue
+                            elif len(value) > n_entries:
+                                value = value[:n_entries]
 
                             with self.__mutex:
                                 for i in range(n_entries):

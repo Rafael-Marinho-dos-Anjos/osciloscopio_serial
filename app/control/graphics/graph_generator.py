@@ -70,6 +70,9 @@ class GraphGenerator(metaclass=SingletonMeta):
                 if len(values[0]) == 0:
                     continue
 
+                elif len(values) > len(self.__signals):
+                    values = values[:len(self.__signals)]
+
                 ax.clear()
 
                 for val in values:
