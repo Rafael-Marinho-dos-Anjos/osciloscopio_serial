@@ -36,6 +36,15 @@ class GraphGenerator(metaclass=SingletonMeta):
             n_entries=len(self.__signals),
             input_freq=ConfigHolder().get_frequence(),
             selector=self.__port_selector)
+        
+        enable_divisor = ConfigHolder().divisor_is_enabled()
+        rb, rc = ConfigHolder().get_divisor_resistors()
+
+        def __divisor(value):
+            v = value * (rb + rc) / rb
+            v += 2.5
+            
+            return v
 
         def __gen_graph():
             plt.switch_backend('agg')
@@ -64,6 +73,9 @@ class GraphGenerator(metaclass=SingletonMeta):
                 ax.clear()
 
                 for val in values:
+                    if enable_divisor:
+                        val = list(map(__divisor, val))
+
                     ax.plot(time, val)
                 
                 values = np.array(values)
