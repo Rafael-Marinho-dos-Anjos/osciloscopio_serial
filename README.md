@@ -32,11 +32,11 @@ pip install -r requirements.txt
 
 3. Execute o programa Python.
 
-4. Atualize a frequência de amostragem configurada na leitura do Arduino no menu "Config > Frequência de amostragem".
+4. Atualize a frequência de amostragem configurada na leitura do Arduino no menu "Configurações > Frequência de amostragem".
 
-5. Configure a quantidade de sinais lido pelo Arduino no menu "Config > Entrada de sinais". É importante informar na configuração a quantidade exata de sinais lidos senão o programa não funcionará corretamente.
+5. Configure a quantidade de sinais lido pelo Arduino no menu "Configurações > Entrada de sinais". É importante informar na configuração a quantidade exata de sinais lidos senão o programa não funcionará corretamente.
 
-6. Caso esteja utilizando divisor de tensão para ler valores negativos e maiores que 5V, configure os valores de Rb e Rc no menu "Config > Divisor de tensão".
+6. Caso esteja utilizando divisor de tensão para ler valores negativos e maiores que 5V, configure os valores de Rb e Rc no menu "Configurações > Divisor de tensão".
 
 7. No menu "Portas > Selecionar dispositivo de entrada" e selecione a placa que fará a leitura dos sinais. Em seguida, o programa começará a exibir as leituras na tela.
 
@@ -44,7 +44,7 @@ pip install -r requirements.txt
 
 A ligação com o divisor de tensão é feita com o auxílio de uma tensão de referência gerada entre os pinos 5V e GND por dois resistores de mesmo valor Ra. A leitura é feita entre um resistor Rc ligado ao sinal lido e o pino de leitura e um resistor Rb ligado entre o pino de leitura e as tensões de referência do Arduino e do sinal lido.
 
-Caso prefira não utilizar o divisor de tensão, basta ligar o sinal lido diretamente ao pino e a sua referência ao pino GND. Lembre-se de ativar (ou desativar) esse recurso e configurar os valores de Rb e Rc no menu "Config > Divisor de tensão".
+Caso prefira não utilizar o divisor de tensão, basta ligar o sinal lido diretamente ao pino e a sua referência ao pino GND. Lembre-se de ativar (ou desativar) esse recurso e configurar os valores de Rb e Rc no menu "Configurações > Divisor de tensão".
 
 Na figura a seguir é mostrada como é feita essa ligação para uma leitura feita no pino A5.
 

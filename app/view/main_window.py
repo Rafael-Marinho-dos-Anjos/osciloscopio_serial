@@ -51,7 +51,7 @@ class MainWindow(metaclass=SingletonMeta):
         self.__conf_menu.add_command(label="Frequência de amostragem", command=self.__config_frequence)
         self.__conf_menu.add_command(label="Entrada de sinais", command=self.__signals)
         self.__conf_menu.add_command(label="Divisor de tensão", command=self.__config_divisor)
-        self.__menubar.add_cascade(label="Config", menu=self.__conf_menu)
+        self.__menubar.add_cascade(label="Configurações", menu=self.__conf_menu)
 
         self.__ports_menu = tk.Menu(self.__menubar, tearoff=0, postcommand=self.__update_ports_menu)
         self.__select_port_submenu = tk.Menu(self.__ports_menu, tearoff=0)
