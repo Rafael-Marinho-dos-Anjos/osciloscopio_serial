@@ -82,6 +82,8 @@ class DivisorConfig(tk.Toplevel):
         self.__entry_greatness_rc.place(relx=0.75, rely=0.65, anchor='w')
         self.__ok_button.place(relx=0.5, rely=0.8, anchor='center')
 
+        self.__toggle_checkbutton()
+
     def __toggle_checkbutton(self):
         if self.__enabled.get():
             self.__entry_rb.config(state="normal")
