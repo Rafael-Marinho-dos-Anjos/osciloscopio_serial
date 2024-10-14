@@ -88,7 +88,7 @@ class Reader():
                                     
                                 reading = self.__reading
 
-                            time += 10 * step
+                            time += step
                 except:
                     with self.__mutex:
                         self.__reading = False

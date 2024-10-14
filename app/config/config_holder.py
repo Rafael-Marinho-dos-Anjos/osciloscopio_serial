@@ -14,17 +14,29 @@ class ConfigHolder(metaclass=SingletonMeta):
         
         if not hasattr(self, "_ConfigHolder__cfg_dict"):
             self.__cfg_dict = {
-                "frequence": 1000,
-                "signals": [
-                    "A"
-                ]
+                "frequence": 1000.0,
+                "signals": ["A"],
+                "divisor": {
+                    "enabled": False,
+                    "Rb": 100.0,
+                    "Rc": 100.0
+                }
             }
 
-        elif "frequence" not in self.__cfg_dict.keys():
-            self.__cfg_dict["frequence"] = 1000
+        else:
+            if "frequence" not in self.__cfg_dict.keys():
+                self.__cfg_dict["frequence"] = 1000
 
-        elif "signals" not in self.__cfg_dict.keys():
-            self.__cfg_dict["signals"] = ["A"]
+            if "signals" not in self.__cfg_dict.keys():
+                self.__cfg_dict["signals"] = ["A"]
+            
+
+            if "divisor" not in self.__cfg_dict.keys():
+                self.__cfg_dict["divisor"] = {
+                    "enabled": False,
+                    "Rb": 100.0,
+                    "Rc": 100.0
+                }            
 
     def set_frequence(self, frequence: float):
         self.__cfg_dict["frequence"] = frequence
@@ -47,6 +59,19 @@ class ConfigHolder(metaclass=SingletonMeta):
     
     def get_signal_labels(self):
         return self.__cfg_dict["signals"]
+
+    def enable_divisor(self, enable: bool):
+        self.__cfg_dict["divisor"]["enabled"] = enable
+    
+    def set_divisor_resistors(self, rb: float, rc: float):
+        self.__cfg_dict["divisor"]["Rb"] = rb
+        self.__cfg_dict["divisor"]["Rc"] = rc
+    
+    def divisor_is_enabled(self):
+        return self.__cfg_dict["divisor"]["enabled"]
+    
+    def get_divisor_resistors(self):
+        return self.__cfg_dict["divisor"]["Rb"], self.__cfg_dict["divisor"]["Rc"]
 
     def save(self):
         with open(self.__cfg_file_path, "w") as file:
