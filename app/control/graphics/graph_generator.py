@@ -41,8 +41,8 @@ class GraphGenerator(metaclass=SingletonMeta):
         rb, rc = ConfigHolder().get_divisor_resistors()
 
         def __divisor(value):
+            v -= 2.5
             v = value * (rb + rc) / rb
-            v += 2.5
             
             return v
 
